@@ -1,12 +1,15 @@
 ---
 name: figure-workflow
-description: Use when working with the figure management system - creating figures, iterating versions, uploading images, adding comments, or optimizing figures based on review feedback.
+description: Use when working with the figure management system - creating figures, iterating versions, uploading images, adding comments, generating AI figure descriptions, or optimizing figures based on review feedback.
 ---
 
 # 图表管理系统
 
 ## 适用关键词
-"图表"、"绘图"、"图形"、"版本"、"出图"、"流程图"
+"图表"、"绘图"、"图形"、"版本"、"出图"、"流程图"、"图表说明"、"图表描述"
+
+## 覆盖能力
+- **7.2 图表描述生成**（L1）— 基于图片生成学术规范的图表说明文字
 
 ## 生命周期
 
@@ -75,7 +78,49 @@ addComment(data) → { objectId }
 deleteComment(objectId) → void
 ```
 
-## 场景 1：创建图表
+---
+
+## AI 操作场景
+
+### 场景 1：AI 图表描述生成（7.2）
+
+读取图表最新版本的图片，生成学术规范的图表说明文字。
+
+```
+步骤：
+1. 查询图表 → figureService.getAll(projectId) 或指定 figureId
+2. 获取最新版本 → figureService.getVersions(figureId)
+3. 读取版本图片（imageUrl）— Claude 可直接视觉分析
+4. 结合图表名称、需求描述、评论反馈，生成学术规范的图表说明
+5. 更新 work_figure.description
+```
+
+```ts
+// 获取图表及最新版本
+const figure = await parseClient.get('work_figure', figureId)
+const versions = await figureService.getVersions(figureId)
+const latestVersion = versions.sort((a, b) => b.version - a.version)[0]
+
+// AI 分析图片（通过 imageUrl）→ 生成描述
+const description = 'AI 生成的学术规范图表说明...'
+
+// 更新图表描述
+await figureService.update(figureId, { description })
+// → 记录操作日志
+```
+
+**生成描述的要素：**
+- 图表类型和结构（流程图 / 机制图 / 数据图等）
+- 主要内容和信息传达
+- 关键标注和图例说明
+- 学术规范的语言表述
+- 结合 requirement 和 comments 中的上下文
+
+---
+
+## 手动操作场景
+
+### 场景 2：创建图表
 
 ```ts
 const { objectId } = await figureService.create({
@@ -86,7 +131,7 @@ const { objectId } = await figureService.create({
 })
 ```
 
-## 场景 2：新增版本（迭代）
+### 场景 3：新增版本（迭代）
 
 ```ts
 const versions = await figureService.getVersions(figureId)
@@ -102,7 +147,7 @@ await figureService.createVersion({
 await figureService.update(figureId, { status: 'iterating', versionCount: nextVersion })
 ```
 
-## 场景 3：上传图片
+### 场景 4：上传图片
 
 ```ts
 const { url } = await parseClient.uploadFile(safeFileName, fileBlob)
@@ -111,7 +156,7 @@ await figureService.updateVersion(versionId, { imageUrl: url, status: 'uploaded'
 await figureService.update(figureId, { currentImageUrl: url })
 ```
 
-## 场景 4：添加评论
+### 场景 5：添加评论
 
 ```ts
 await figureService.addComment({
@@ -121,7 +166,7 @@ await figureService.addComment({
 })
 ```
 
-## 场景 5：根据意见完整迭代
+### 场景 6：根据意见完整迭代
 
 ```ts
 const comments = await figureService.getComments(latestVersionId)
@@ -140,9 +185,7 @@ await figureService.updateVersion(versionId, { status: 'approved' })
 await figureService.update(figureId, { status: 'confirmed' })
 ```
 
-## 日志要求
-
-所有写操作（create、update、createVersion、updateVersion、addComment 等）必须按 `dacheng:operation-log` 规范记录日志。
+---
 
 ## 状态参考
 
@@ -159,3 +202,7 @@ await figureService.update(figureId, { status: 'confirmed' })
 | `pending` | 等待图片上传 |
 | `uploaded` | 图片已就绪，待审阅 |
 | `approved` | 该版本定稿 |
+
+## 日志要求
+
+所有写操作（create、update、createVersion、updateVersion、addComment 等）必须按 `dacheng:operation-log` 规范记录日志。

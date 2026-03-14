@@ -65,7 +65,7 @@ description: Use when needing project data architecture overview, dual-workspace
 | `work_feedback` | 段落级反馈意见 |
 | `work_revision` | 段落级修改稿 |
 | `work_global_requirement` | 全局需求（支持回复线程） |
-| `work_snapshot_*` | 版本快照（按 snapshotType 分表） |
+| `work_snapshot` | 版本快照（单表，按 snapshotType 区分） |
 
 ### 图表表（FK = `projectId` / `figureId` / `versionId`）
 
@@ -75,6 +75,13 @@ description: Use when needing project data architecture overview, dual-workspace
 | `work_figure_version` | 图表版本 |
 | `work_figure_comment` | 版本评论 |
 | `work_figure_questionnaire` | 图表问卷（Q1-Q20） |
+
+### 格式规范表（FK = `projectId`，论文专属）
+
+| Parse 类 | 用途 |
+|----------|------|
+| `work_format_spec` | 格式规范（每项目 1 条，扁平存储 16 组格式字段） |
+| `work_format_upload` | 格式模板文件（fileName, fileUrl, parsedData） |
 
 ### 其他表（FK = `projectId`）
 
@@ -86,6 +93,7 @@ description: Use when needing project data architecture overview, dual-workspace
 | `work_lit_library` | 文献库 |
 | `work_lit_folder` | 文献文件夹 |
 | `work_lit_citation` | 文献引用 |
+| `work_literature_report` | 阅读报告（待实现） |
 | `work_questionnaire` | 通用问卷 |
 | `work_questionnaire_response` | 问卷回答 |
 
@@ -93,32 +101,36 @@ description: Use when needing project data architecture overview, dual-workspace
 
 ### WorkProfile
 ```
-objectId, name, role, status, userId
-personalInfo: { gender, birthDate, education, institution, department, position, researchField, email, phone }
-patents: [{ title, type, patentNumber, inventors, year }]
-books: [{ title, publisher, year, role, isbn }]
+objectId, name, role, status, userId, accessibleProjects
+personalInfo: { name, gender, birthDate, institution, department, title, phdDate, phdSchool, supervisor, email, phone, disciplineCode }
+techniques: [String], institutionIntro, researchBackground, advisorInfo, thesisRequirements
+labConditions: { platforms[], equipment[] }, disciplineCodes: [String]
+profileCompleteness: Number, notes
 ```
+> 专利和著作是独立表（`work_info_patent`、`work_info_book`），不是 profile 的嵌入字段。
 
 ### WorkProject
 ```
 objectId, type, typeGroup('thesis'|'nsf'), profileId, title, phase, status
+year, displayName, shortName, directionCode
+completionRates: Object, nextAction, dashboardHtmls: Object, innovationPoints: [String]
 ```
 
-### WorkContentSection
+### WorkContentSection（四张内容表共同字段）
 ```
-objectId, projectId, module, contentType, contentHtml, version, isLatest, wordCount
+objectId, projectId, module, contentHtml, version, workVersion, isLatest, wordCount
 ```
 
 ### WorkFeedback
 ```
 objectId, sectionId, projectId, module, paragraphIndex, fingerprint
-feedbackText, source('manual'|'ai'|'ai_request'), status('pending'|'accepted'|'rejected'|'resolved'|'ai_revised'), author
+feedbackText, feedbackHtml, source('manual'|'ai'), status('pending'|'accepted'|'rejected'|'resolved'|'ai_revised'), author
 ```
 
 ### WorkRevision
 ```
 objectId, sectionId, projectId, module, paragraphIndex, fingerprint
-originalHtml, revisedHtml, rationale, feedbackId
+revisedHtml, rationale, feedbackId
 source('ai'|'manual'|'ai_request'), status('pending'|'accepted'|'rejected'|'requested'|'cleared'), rejectReason, author
 ```
 
@@ -134,17 +146,17 @@ objectId, figureId, version, requirement, prompt, promptEn, imageUrl, status('pe
 
 ### WorkPublication (work_info_publication)
 ```
-objectId, profileId, title, authors, journal, year, impactFactor, authorPosition, contribution, isCoreAsset
+objectId, profileId, title, journal, year, authorPosition, impactFactor, isCoreAsset
 ```
 
 ### WorkGrant (work_info_grant)
 ```
-objectId, profileId, title, funder, amount, startDate, endDate, role
+objectId, profileId, title, funder, amount, startDate, endDate, status
 ```
 
 ### WorkGlobalRequirement
 ```
-objectId, projectId, typeGroup, module, content, author, status('open'|'resolved'), parentId(回复线程)
+objectId, projectId, typeGroup, module, content, author, authorId, status('open'|'resolved'), parentId(回复线程)
 ```
 
 ## Parse REST API

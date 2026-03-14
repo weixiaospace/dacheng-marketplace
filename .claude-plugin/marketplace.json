@@ -1,0 +1,14 @@
+{
+  "name": "dacheng",
+  "owner": {
+    "name": "yuzi"
+  },
+  "plugins": [
+    {
+      "name": "dacheng",
+      "source": "./",
+      "description": "Skills library for 工作台NEO",
+      "version": "1.0.0"
+    }
+  ]
+}

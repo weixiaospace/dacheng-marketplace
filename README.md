@@ -15,6 +15,7 @@ dacheng-marketplace/
 │   ├── content-writing/     # 内容读写（提案/大纲/正文/快照）
 │   ├── debug-parse/         # Parse Server 调试排错
 │   ├── figure-workflow/     # 图表数据管理流程
+│   ├── operation-log/       # AI 操作日志规范（审计+回滚）
 │   └── review-feedback/     # 段落级评审反馈数据操作
 └── README.md                # 本文件
 ```
@@ -35,6 +36,19 @@ dacheng-marketplace/
 
 安装后输入 `/` 可看到以 `dacheng:` 为前缀的技能列表。
 
+### 3. 配置 Parse 连接
+
+在使用 dacheng skills 的项目根目录创建 `.env` 文件：
+
+```env
+PARSE_SERVER_URL=http://your-parse-server/parse
+PARSE_APP_ID=yourAppId
+PARSE_MASTER_KEY=yourMasterKey
+```
+
+> Skills 通过读取 `.env` 获取连接信息。如未配置，Claude 会在首次使用时提示你填写。
+> `.env` 文件已被 `.gitignore` 忽略，不会提交到仓库。
+
 ## 技能一览
 
 | 技能 | 触发场景 |
@@ -45,6 +59,7 @@ dacheng-marketplace/
 | `dacheng:debug-parse` | Parse API 报错（400/401/130/209） |
 | `dacheng:review-feedback` | 段落评审、AI 修订、全局需求 |
 | `dacheng:figure-workflow` | 图表创建、版本迭代、评审优化 |
+| `dacheng:operation-log` | Parse 写操作审计日志（自动触发） |
 
 ## 使用方式
 
@@ -72,6 +87,15 @@ Claude 会根据任务内容自动匹配并调用相关技能。例如：
 1. `/dacheng:architecture` — 了解数据表结构和 Parse API
 2. `/dacheng:add-crud-table` — 新增表的模型和服务层
 3. `/dacheng:content-writing` 或 `/dacheng:review-feedback` — 操作具体业务数据
+
+## 注意事项
+
+- **数据表命名**：所有表使用 `work_` 前缀 + snake_case（如 `work_project_report`）
+- **Master Key 安全**：仅用于 AI/后端脚本操作，永远不要放在前端代码中
+- **Windows 用户**：禁止在命令行参数中直接写中文 JSON，必须保存为 `.js` 文件后 `node 文件名.js` 执行
+- **破坏性操作**：执行 DROP/DELETE/TRUNCATE 前必须二次确认
+- **版本管理**：历史版本记录只设 `isLatest=false`，不要删除
+- **操作日志**：所有 Parse 写操作自动双写日志（本地 `logs/ai-operations.log` + Parse `work_ai_log` 表），支持按会话追踪和回滚
 
 ## 更新
 

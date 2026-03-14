@@ -6,9 +6,14 @@ description: Use when encountering Parse Server API errors (400, 401, 130, 209),
 # Parse Server 调试
 
 ## 连接信息
-- URL：`http://parse1.weixiao.space/parse`
-- App ID：`parseKeyan`
-- **永远不要将 Master Key 放在前端代码中**
+
+从项目 `.env` 文件读取以下变量：
+- `PARSE_SERVER_URL` — Parse Server 地址
+- `PARSE_APP_ID` — Application ID
+- `PARSE_MASTER_KEY` — Master Key（仅 AI/后端脚本使用，**永远不要放在前端代码中**）
+
+> 如果 `.env` 不存在或缺少以上变量，请提示用户：
+> "请在项目根目录创建 `.env` 文件并填写 Parse 连接信息（PARSE_SERVER_URL、PARSE_APP_ID、PARSE_MASTER_KEY）"
 
 ## parseClient API
 
@@ -68,10 +73,9 @@ const blob = new Blob([text], { type: 'text/plain' })
 2. 检查 parseClient 的请求构造
 3. curl 测试：
    ```bash
-   curl -X GET "http://parse1.weixiao.space/parse/classes/work_xxx" \
-     -H "X-Parse-Application-Id: parseKeyan" \
-     -H "X-Parse-REST-API-Key: <key>" \
-     -H "X-Parse-Session-Token: <token>"
+   curl -X GET "$PARSE_SERVER_URL/classes/work_xxx" \
+     -H "X-Parse-Application-Id: $PARSE_APP_ID" \
+     -H "X-Parse-Master-Key: $PARSE_MASTER_KEY"
    ```
 4. 容器日志：`docker logs parse-server-online`
 5. 进入容器检查环境变量：`docker exec -it parse-server-online env | grep PARSE`
@@ -95,10 +99,9 @@ DELETE /parse/classes/<className>/<id>
 POST   /parse/files/<fileName>             # body: 文件内容
 ```
 
-Headers:
-- `X-Parse-Application-Id: parseKeyan`
-- `X-Parse-REST-API-Key: <key>`
-- `X-Parse-Session-Token: <token>`（认证用户操作）
+Headers（值从 `.env` 读取）:
+- `X-Parse-Application-Id: $PARSE_APP_ID`
+- `X-Parse-Master-Key: $PARSE_MASTER_KEY`
 
 ## 数据表命名
 

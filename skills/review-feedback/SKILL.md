@@ -168,6 +168,10 @@ await reviewService.createGlobalRequirement({
 
 支持回复（`parentId` 指向父条目）。状态：`open` / `resolved`。
 
+## 日志要求
+
+所有写操作（saveWorkFeedback、saveWorkRevision、updateWorkRevision、createGlobalRequirement 等）必须按 `dacheng:operation-log` 规范记录日志。
+
 ## 内容类型速查
 
 | typeGroup | 结构化 contentType | 写作 contentType | Parse 类 |

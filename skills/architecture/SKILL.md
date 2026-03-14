@@ -7,7 +7,8 @@ description: Use when needing project data architecture overview, dual-workspace
 
 ## 后端
 - Parse Server（BaaS，REST API）
-- 连接：`http://parse1.weixiao.space/parse`，App ID：`parseKeyan`
+- 连接信息从项目 `.env` 文件读取（`PARSE_SERVER_URL`、`PARSE_APP_ID`、`PARSE_MASTER_KEY`）
+- 如果 `.env` 不存在或缺少以上变量，请提示用户创建并填写
 
 ## 双工作台模式
 
@@ -156,10 +157,9 @@ DELETE /parse/classes/<className>/<id>
 POST   /parse/files/<fileName>             # body: 文件内容
 ```
 
-Headers:
-- `X-Parse-Application-Id: parseKeyan`
-- `X-Parse-REST-API-Key: <key>`
-- `X-Parse-Session-Token: <token>`（认证用户操作）
+Headers（值从 `.env` 读取）:
+- `X-Parse-Application-Id: $PARSE_APP_ID`
+- `X-Parse-Master-Key: $PARSE_MASTER_KEY`
 
 ## 服务层 API
 

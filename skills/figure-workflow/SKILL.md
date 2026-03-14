@@ -140,6 +140,10 @@ await figureService.updateVersion(versionId, { status: 'approved' })
 await figureService.update(figureId, { status: 'confirmed' })
 ```
 
+## 日志要求
+
+所有写操作（create、update、createVersion、updateVersion、addComment 等）必须按 `dacheng:operation-log` 规范记录日志。
+
 ## 状态参考
 
 **Figure 状态：**

@@ -47,6 +47,10 @@ export const xxxService = {
 
 添加表结构定义到数据库 Schema 文档。
 
+## 日志要求
+
+使用新表进行写操作时，必须按 `dacheng:operation-log` 规范记录日志。
+
 ## 关键约定
 
 | 约定 | 规则 |

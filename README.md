@@ -26,21 +26,25 @@ dacheng-marketplace/
 
 ## 安装
 
-### 1. 注册 Marketplace
+### 1. 在终端内开启claude
+![alt text](images/image.png)
+
+### 2. 注册 Marketplace
 
 ```bash
 /plugin marketplace add https://cnb.cool/dachengzhihui/dacheng-marketplace.git
 ```
 
-### 2. 安装插件
+![alt text](images/image-1.png)
+
+### 3. 安装插件
 
 ```bash
 /plugin install dacheng@dacheng
 ```
+![alt text](images/image-2.png)
 
-安装后输入 `/` 可看到以 `dacheng:` 为前缀的技能列表。
-
-### 3. 配置 Parse 连接
+### 4. 配置 Parse 连接
 
 在使用 dacheng skills 的项目根目录创建 `.env` 文件：
 
@@ -51,7 +55,17 @@ PARSE_MASTER_KEY=yourMasterKey
 ```
 
 > Skills 通过读取 `.env` 获取连接信息。如未配置，Claude 会在首次使用时提示你填写。
-> `.env` 文件已被 `.gitignore` 忽略，不会提交到仓库。
+
+### 5. 使用方式
+
+可以在vscode中使用
+
+![alt text](images/image-3.png)
+
+一般来说，使用固定的语句也可以正常使用,例如：
+
+```使用dacheng技能，帮我查看一下叶问的项目列表!```
+
 
 ## 技能一览
 
@@ -110,11 +124,10 @@ Claude 会根据任务内容自动匹配并调用相关技能。例如：
 ## 更新
 
 ```bash
-claude plugins update dacheng
+/plugin marketplace update dacheng 
 ```
-
 ## 卸载
 
 ```bash
-claude plugins uninstall dacheng
+/plugin marketplace remove dacheng
 ```

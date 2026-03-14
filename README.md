@@ -9,14 +9,18 @@ dacheng-marketplace/
 ├── .claude-plugin/
 │   ├── plugin.json          # 插件元信息
 │   └── marketplace.json     # Marketplace 注册信息
-├── skills/                  # 技能定义
+├── skills/                  # 技能定义（10 个）
 │   ├── add-crud-table/      # 新增 Parse 数据表及服务层
 │   ├── architecture/        # 数据架构、双工作台模式、Parse API
 │   ├── content-writing/     # 内容读写（提案/大纲/正文/快照）
+│   ├── data-plan/           # 数据分析方案（变量/统计/可视化）
 │   ├── debug-parse/         # Parse Server 调试排错
 │   ├── figure-workflow/     # 图表数据管理流程
+│   ├── literature-ops/      # 文献管理（检索/推荐/验证/标注）
 │   ├── operation-log/       # AI 操作日志规范（审计+回滚）
+│   ├── profile-ops/         # 个人档案（CV提取/诊断/方向提炼）
 │   └── review-feedback/     # 段落级评审反馈数据操作
+├── docs/                    # 规划文档
 └── README.md                # 本文件
 ```
 
@@ -51,15 +55,18 @@ PARSE_MASTER_KEY=yourMasterKey
 
 ## 技能一览
 
-| 技能 | 触发场景 |
-|------|---------|
-| `dacheng:architecture` | 了解数据架构、双工作台模式、Parse API |
-| `dacheng:add-crud-table` | 新增 Parse 数据表及服务层 |
-| `dacheng:content-writing` | 读写内容模块（SQ/OL/M/CH） |
-| `dacheng:debug-parse` | Parse API 报错（400/401/130/209） |
-| `dacheng:review-feedback` | 段落评审、AI 修订、全局需求 |
-| `dacheng:figure-workflow` | 图表创建、版本迭代、评审优化 |
-| `dacheng:operation-log` | Parse 写操作审计日志（自动触发） |
+| 技能 | 触发场景 | 覆盖能力 |
+|------|---------|---------|
+| `dacheng:architecture` | 了解数据架构、双工作台模式、Parse API | — |
+| `dacheng:add-crud-table` | 新增 Parse 数据表及服务层 | — |
+| `dacheng:content-writing` | 读写内容模块（SQ/OL/M/CH） | 4.1-4.3, 3.1-3.4, 4.5 |
+| `dacheng:data-plan` | 数据分析方案（变量/统计/可视化） | 6.1-6.3 |
+| `dacheng:debug-parse` | Parse API 报错（400/401/130/209） | — |
+| `dacheng:figure-workflow` | 图表创建、版本迭代、评审优化 | 7.1, 7.2 |
+| `dacheng:literature-ops` | 文献检索、推荐、DOI验证、摘要标注 | 2.1-2.4 |
+| `dacheng:operation-log` | Parse 写操作审计日志（自动触发） | — |
+| `dacheng:profile-ops` | CV提取、完整度诊断、方向提炼 | 1.1-1.3 |
+| `dacheng:review-feedback` | 段落评审、AI 修订、版本快照 | 5.1-5.4 |
 
 ## 使用方式
 
@@ -79,6 +86,9 @@ Claude 会根据任务内容自动匹配并调用相关技能。例如：
 - 需要查询内容段数据 → 自动触发 `content-writing`
 - 遇到 Parse 401 错误 → 自动触发 `debug-parse`
 - 操作图表版本数据 → 自动触发 `figure-workflow`
+- 文献检索或引用管理 → 自动触发 `literature-ops`
+- 个人档案或 CV 解析 → 自动触发 `profile-ops`
+- 数据分析方案设计 → 自动触发 `data-plan`
 
 ### 组合使用
 

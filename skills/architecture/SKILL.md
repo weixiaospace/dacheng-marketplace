@@ -76,12 +76,24 @@ description: Use when needing project data architecture overview, dual-workspace
 | `work_figure_comment` | 版本评论 |
 | `work_figure_questionnaire` | 图表问卷（Q1-Q20） |
 
-### 格式规范表（FK = `projectId`，论文专属）
+### 格式规范表（论文专属，v2 模板体系）
+
+| Parse 类 | FK | 用途 |
+|----------|-----|------|
+| `work_format_template` | — | 格式模板（rules JSON ~160参数） |
+| `work_format_binding` | `projectId` + `templateId` | 项目↔模板绑定（含 overrides） |
+| `work_format_category` | `parentId` | 模板分类树 |
+| `work_format_upload` | `projectId` | 格式参考文件 |
+
+### 文献表（FK = `profileId`，归属个人）
 
 | Parse 类 | 用途 |
 |----------|------|
-| `work_format_spec` | 格式规范（每项目 1 条，扁平存储 16 组格式字段） |
-| `work_format_upload` | 格式模板文件（fileName, fileUrl, parsedData） |
+| `work_literature` | 文献条目（归属 profileId） |
+| `work_lit_library` | 研究方向库（归属 profileId） |
+| `work_lit_folder` | 文献文件夹（归属 profileId，支持嵌套） |
+| `work_lit_citation` | 文献↔项目引用关联（FK = `projectId` + `literatureId`） |
+| `work_literature_report` | 文献报告（归属 profileId） |
 
 ### 其他表（FK = `projectId`）
 
@@ -89,11 +101,6 @@ description: Use when needing project data architecture overview, dual-workspace
 |----------|------|
 | `work_data_plan` | 数据规划 |
 | `work_project_report` | 项目报告（MD/HTML） |
-| `work_literature` | 文献条目 |
-| `work_lit_library` | 文献库 |
-| `work_lit_folder` | 文献文件夹 |
-| `work_lit_citation` | 文献引用 |
-| `work_literature_report` | 阅读报告（待实现） |
 | `work_questionnaire` | 通用问卷 |
 | `work_questionnaire_response` | 问卷回答 |
 
@@ -239,6 +246,23 @@ create(data) → { objectId }
 update(objectId, data) → void
 save(objectId, data) → { objectId }   // upsert
 remove(objectId) → void
+```
+
+### formatTemplateService / formatBindingService
+```
+// 模板
+getById(objectId) → WorkFormatTemplate
+getPublished() → WorkFormatTemplate[]
+create(data) → { objectId }
+update(objectId, data) → void
+remove(objectId) → void
+
+// 绑定
+getBinding(projectId) → WorkFormatBinding | null
+bind(projectId, templateId, overrides?) → { objectId }
+getResolvedRules(projectId) → object    // deepMerge(template.rules, binding.overrides)
+createCustom(projectId, name) → { templateId, bindingId }
+unbind(objectId) → void
 ```
 
 ### workInfoService（9 张表通用工厂）

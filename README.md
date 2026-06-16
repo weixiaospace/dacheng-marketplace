@@ -9,7 +9,7 @@ dacheng-marketplace/
 ├── .claude-plugin/
 │   ├── plugin.json          # 插件元信息
 │   └── marketplace.json     # Marketplace 注册信息
-├── skills/                  # 技能定义（10 个）
+├── skills/                  # 技能定义（12 个）
 │   ├── add-crud-table/      # 新增 Parse 数据表及服务层
 │   ├── architecture/        # 数据架构、双工作台模式、Parse API
 │   ├── content-writing/     # 内容读写（提案/大纲/正文/快照）
@@ -81,6 +81,7 @@ PARSE_MASTER_KEY=yourMasterKey
 | `dacheng:operation-log` | Parse 写操作审计日志（自动触发） | — |
 | `dacheng:profile-ops` | CV提取、完整度诊断、方向提炼 | 1.1-1.3 |
 | `dacheng:review-feedback` | 段落评审、AI 修订、版本快照 | 5.1-5.4 |
+| `dacheng:tauri-cnb-autoupdate` | Tauri 自动更新：GitHub 构建签名 + CNB 托管下载（国内） | — |
 
 ## 使用方式
 

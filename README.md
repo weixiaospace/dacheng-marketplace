@@ -82,6 +82,7 @@ PARSE_MASTER_KEY=yourMasterKey
 | `dacheng:profile-ops` | CV提取、完整度诊断、方向提炼 | 1.1-1.3 |
 | `dacheng:review-feedback` | 段落评审、AI 修订、版本快照 | 5.1-5.4 |
 | `dacheng:tauri-cnb-autoupdate` | Tauri 自动更新：GitHub 构建签名 + CNB 托管下载（国内） | — |
+| `dacheng:keyan-deployer-mcp` | 通过 MCP 驱动 keyan-deployer：建站、部署、启停、查状态、管报告 | — |
 
 ## 使用方式
 
@@ -104,6 +105,8 @@ Claude 会根据任务内容自动匹配并调用相关技能。例如：
 - 文献检索或引用管理 → 自动触发 `literature-ops`
 - 个人档案或 CV 解析 → 自动触发 `profile-ops`
 - 数据分析方案设计 → 自动触发 `data-plan`
+- 部署 / 管理 keyan-deployer 站点或报告 → 自动触发 `keyan-deployer-mcp`
+- Tauri 自动更新配置 → 自动触发 `tauri-cnb-autoupdate`
 
 ### 组合使用
 

@@ -5,10 +5,22 @@
   },
   "plugins": [
     {
-      "name": "dacheng",
-      "source": "./",
-      "description": "Skills library for 工作台NEO + keyan-deployer MCP operations",
-      "version": "1.0.4"
+      "name": "work",
+      "source": "./plugins/work",
+      "description": "Skills for keyan/dacheng research workbench",
+      "version": "1.1.0"
+    },
+    {
+      "name": "deployer",
+      "source": "./plugins/deployer",
+      "description": "Skills for keyan-deployer operations",
+      "version": "1.0.0"
+    },
+    {
+      "name": "dev",
+      "source": "./plugins/dev",
+      "description": "Development skills - Tauri auto-update and build workflows",
+      "version": "1.0.0"
     }
   ]
 }

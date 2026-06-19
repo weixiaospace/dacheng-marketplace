@@ -1,0 +1,8 @@
+{
+  "name": "dev",
+  "version": "1.0.0",
+  "description": "Development skills - Tauri auto-update, build/release workflows, and local dev tooling",
+  "author": {
+    "name": "yuzi"
+  }
+}

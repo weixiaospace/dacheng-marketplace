@@ -1,8 +1,0 @@
-{
-  "name": "dacheng",
-  "version": "1.0.4",
-  "description": "Skills library for 工作台NEO - dev patterns, UI conventions, Parse debugging, domain workflows, and keyan-deployer MCP operations",
-  "author": {
-    "name": "yuzi"
-  }
-}

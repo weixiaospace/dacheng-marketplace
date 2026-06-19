@@ -1,0 +1,6 @@
+{
+  "keyan-deployer-mcp": {
+    "command": "npx",
+    "args": ["-y", "@dachengzhihui/keyan-deployer-mcp"]
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "name": "deployer",
+  "version": "1.0.0",
+  "description": "Skills for keyan-deployer operations - MCP server setup, site deployment, report management, and Tauri auto-update",
+  "author": {
+    "name": "yuzi"
+  }
+}
